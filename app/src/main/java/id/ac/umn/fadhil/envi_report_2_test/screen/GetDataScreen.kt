@@ -1,9 +1,11 @@
 package id.ac.umn.fadhil.envi_report_2_test.screen
 
 import android.net.Uri
+import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -22,16 +24,23 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -48,14 +57,32 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.example.envi_report.ui.theme.EnviReportTheme
 import id.ac.umn.fadhil.envi_report_2_test.R
 import id.ac.umn.fadhil.envi_report_2_test.nav.Screens
+import id.ac.umn.fadhil.envi_report_2_test.signIn.UserData
 import id.ac.umn.fadhil.envi_report_2_test.util_database.ReportData
 import id.ac.umn.fadhil.envi_report_2_test.util_database.SharedViewModel
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Preview
+@Composable
+fun GetDataScreen() {
+    val navController = rememberNavController()
+    val sharedViewModel = remember { SharedViewModel() }
+
+    EnviReportTheme {
+        // Call your Composable function here with the fake NavController and SharedViewModel
+        GetDataScreen(navController = navController, sharedViewModel = sharedViewModel)
+    }
+
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -94,7 +121,7 @@ fun GetDataScreen(
         reportId = ID,
         reportTitle = Title,
         reportDesc = Desc,
-        reportLocation = Location,
+//        reportLocation = Location,
         reportImageUrl = uri.toString(),
         reportStatus = Status,
         reportUsername = Username,
@@ -184,7 +211,7 @@ fun GetDataScreen(
                         ) {data ->
                             Title = data.reportTitle
                             Desc = data.reportDesc
-                            Location = data.reportLocation
+//                            Location = data.reportLocation
                             Status = data.reportStatus
                             uri = Uri.parse(data.reportImageUrl)
                             Username = data.reportUsername
@@ -244,30 +271,72 @@ fun GetDataScreen(
                         )
                     }
 
-                    item {
-                        OutlinedTextField(
-                            modifier = Modifier.fillMaxWidth(),
-                            value = Location,
-                            onValueChange = { Location = it },
-                            label = {
-                                Text(text = "Lokasi")
-                            },
-                            colors = textFieldColor
-                        )
-                    }
+//                    item {
+//                        OutlinedTextField(
+//                            modifier = Modifier.fillMaxWidth(),
+//                            value = Location,
+//                            onValueChange = { Location = it },
+//                            label = {
+//                                Text(text = "Lokasi")
+//                            },
+//                            colors = textFieldColor
+//                        )
+//                    }
+
+//                    item {
+//                        OutlinedTextField(
+//                            modifier = Modifier.fillMaxWidth(),
+//                            value = Status,
+//                            onValueChange = { Status = it },
+//                            label = {
+//                                Text(text = "Status(0-2)")
+//                            },
+//                            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+//                            colors = textFieldColor
+//                        )
+//                    }
 
                     item {
-                        OutlinedTextField(
-                            modifier = Modifier.fillMaxWidth(),
-                            value = Status,
-                            onValueChange = { Status = it },
-                            label = {
-                                Text(text = "Status(0-2)")
-                            },
-                            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                            colors = textFieldColor
-                        )
+                        val statusType = arrayOf("0", "1", "2")
+                        var expanded by remember { mutableStateOf(false) }
+
+                        Box(
+                            modifier = Modifier
+                                .padding(16.dp)
+                        ) {
+                            ExposedDropdownMenuBox(
+                                expanded = expanded,
+                                onExpandedChange = {
+                                    expanded = !expanded
+                                }
+                            ) {
+                                OutlinedTextField(
+                                    value = Status,
+                                    onValueChange = { Status = it },
+                                    readOnly = true,
+                                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                                    modifier = Modifier.menuAnchor(),
+                                    colors = textFieldColor
+                                )
+
+                                ExposedDropdownMenu(
+                                    expanded = expanded,
+                                    onDismissRequest = { expanded = false }
+                                ) {
+                                    statusType.forEach { item ->
+                                        DropdownMenuItem(
+                                            text = { Text(text = item) },
+                                            onClick = {
+                                                Status = item
+                                                expanded = false
+                                            }
+                                        )
+                                    }
+                                }
+                            }
+                        }
                     }
+
 
                     item {
 //                        Image(
@@ -318,11 +387,6 @@ fun GetDataScreen(
                     ),
                     onClick = {
                         showDeleteDialog = true
-//                        sharedViewModel.deleteData(
-//                            reportID = ID.toString(),
-//                            context = context,
-//                            navController = navController
-//                        )
                     }
                 ) {
                     Box(
@@ -354,19 +418,9 @@ fun GetDataScreen(
                         containerColor = colorResource(id = R.color.buttonColor)
                     ),
                     onClick = {
-//                        val reportData = ReportData(
-//                            reportId = ID,
-//                            reportTitle = Title,
-//                            reportDesc = Desc,
-//                            reportLocation = Location,
-//                            reportImageUrl = uri.toString(),
-//                            reportStatus = Status,
-//                            reportUsername = Username,
-//                            imageName = ImageName
-//                        )
                         if (reportData.reportTitle.isNotEmpty() &&
                             reportData.reportDesc.isNotEmpty() &&
-                            reportData.reportLocation.isNotEmpty() &&
+//                            reportData.reportLocation.isNotEmpty() &&
                             uri !== null
                         ){
                             showUpdateDialog = true
@@ -522,5 +576,51 @@ fun DeleteDialog(
             }
         }
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ExposedDropdownMenuBox() {
+    val context = LocalContext.current
+    val statusType = arrayOf("0", "1", "2")
+    var expanded by remember { mutableStateOf(false) }
+    var selectedText by remember { mutableStateOf(statusType[0]) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(32.dp)
+    ) {
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = {
+                expanded = !expanded
+            }
+        ) {
+            TextField(
+                value = selectedText,
+                onValueChange = {  },
+                readOnly = true,
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                modifier = Modifier.menuAnchor()
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                statusType.forEach { item ->
+                    DropdownMenuItem(
+                        text = { Text(text = item) },
+                        onClick = {
+                            selectedText = item
+                            expanded = false
+                            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                }
+            }
+        }
+    }
 }
 
