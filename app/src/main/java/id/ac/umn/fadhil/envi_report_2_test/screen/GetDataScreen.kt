@@ -24,12 +24,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -37,7 +35,6 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -66,7 +63,6 @@ import coil.compose.AsyncImage
 import com.example.envi_report.ui.theme.EnviReportTheme
 import id.ac.umn.fadhil.envi_report_2_test.R
 import id.ac.umn.fadhil.envi_report_2_test.nav.Screens
-import id.ac.umn.fadhil.envi_report_2_test.signIn.UserData
 import id.ac.umn.fadhil.envi_report_2_test.util_database.ReportData
 import id.ac.umn.fadhil.envi_report_2_test.util_database.SharedViewModel
 
@@ -91,12 +87,12 @@ fun GetDataScreen(
     sharedViewModel: SharedViewModel
 ) {
     var ID: Int by remember { mutableStateOf(0) }
-    var Title: String by remember { mutableStateOf("") }
-    var Desc: String by remember { mutableStateOf("") }
+    var title: String by remember { mutableStateOf("") }
+    var desc: String by remember { mutableStateOf("") }
     var Location: String by remember { mutableStateOf("") }
-    var Status: String by remember { mutableStateOf("") }
-    var Username: String by remember { mutableStateOf("") }
-    var ImageName: String by remember { mutableStateOf("") }
+    var status: String by remember { mutableStateOf("") }
+    var username: String by remember { mutableStateOf("") }
+    var imageName: String by remember { mutableStateOf("") }
 
     val context = LocalContext.current
 
@@ -119,13 +115,13 @@ fun GetDataScreen(
 
     val reportData = ReportData(
         reportId = ID,
-        reportTitle = Title,
-        reportDesc = Desc,
+        reportTitle = title,
+        reportDesc = desc,
 //        reportLocation = Location,
         reportImageUrl = uri.toString(),
-        reportStatus = Status,
-        reportUsername = Username,
-        imageName = ImageName
+        reportStatus = status,
+        reportUsername = username,
+        imageName = imageName
     )
 
 //    main layout
@@ -209,13 +205,13 @@ fun GetDataScreen(
 //                            reportDesc = Desc,
                             context = context
                         ) {data ->
-                            Title = data.reportTitle
-                            Desc = data.reportDesc
+                            title = data.reportTitle
+                            desc = data.reportDesc
 //                            Location = data.reportLocation
-                            Status = data.reportStatus
+                            status = data.reportStatus
                             uri = Uri.parse(data.reportImageUrl)
-                            Username = data.reportUsername
-                            ImageName = data.imageName
+                            username = data.reportUsername
+                            imageName = data.imageName
                         }
                     }
                 ){
@@ -234,8 +230,8 @@ fun GetDataScreen(
                     item {
                         OutlinedTextField(
                             modifier = Modifier.fillMaxWidth(),
-                            value = Username,
-                            onValueChange = { Username = it },
+                            value = username,
+                            onValueChange = { username = it },
                             interactionSource = remember {
                                 MutableInteractionSource()
                             },
@@ -250,8 +246,11 @@ fun GetDataScreen(
                     item {
                         OutlinedTextField(
                             modifier = Modifier.fillMaxWidth(),
-                            value = Title,
-                            onValueChange = { Title = it },
+                            value = title,
+                            onValueChange = { title = it },
+                            interactionSource = remember {
+                                MutableInteractionSource()
+                            },
                             label = {
                                 Text(text = "Judul")
                             },
@@ -262,39 +261,17 @@ fun GetDataScreen(
                     item {
                         OutlinedTextField(
                             modifier = Modifier.fillMaxWidth(),
-                            value = Desc,
-                            onValueChange = { Desc = it },
+                            value = desc,
+                            onValueChange = { desc = it },
+                            interactionSource = remember {
+                                MutableInteractionSource()
+                            },
                             label = {
                                 Text(text = "Deskripsi")
                             },
                             colors = textFieldColor
                         )
                     }
-
-//                    item {
-//                        OutlinedTextField(
-//                            modifier = Modifier.fillMaxWidth(),
-//                            value = Location,
-//                            onValueChange = { Location = it },
-//                            label = {
-//                                Text(text = "Lokasi")
-//                            },
-//                            colors = textFieldColor
-//                        )
-//                    }
-
-//                    item {
-//                        OutlinedTextField(
-//                            modifier = Modifier.fillMaxWidth(),
-//                            value = Status,
-//                            onValueChange = { Status = it },
-//                            label = {
-//                                Text(text = "Status(0-2)")
-//                            },
-//                            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-//                            colors = textFieldColor
-//                        )
-//                    }
 
                     item {
                         val statusType = arrayOf("0", "1", "2")
@@ -311,8 +288,8 @@ fun GetDataScreen(
                                 }
                             ) {
                                 OutlinedTextField(
-                                    value = Status,
-                                    onValueChange = { Status = it },
+                                    value = status,
+                                    onValueChange = { status = it },
                                     readOnly = true,
                                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                                     modifier = Modifier.menuAnchor(),
@@ -327,7 +304,7 @@ fun GetDataScreen(
                                         DropdownMenuItem(
                                             text = { Text(text = item) },
                                             onClick = {
-                                                Status = item
+                                                status = item
                                                 expanded = false
                                             }
                                         )
@@ -339,22 +316,6 @@ fun GetDataScreen(
 
 
                     item {
-//                        Image(
-//                            painter = rememberAsyncImagePainter(uri),
-//                            contentDescription = "Report Image",
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .padding(top = 16.dp)
-//                                .height(200.dp)
-//                        )
-
-                        val singlePhotoPicker = rememberLauncherForActivityResult(
-                            contract = ActivityResultContracts.PickVisualMedia(),
-                            onResult = {
-                                uri = it
-                            }
-                        )
-
                         Column(
                             modifier = Modifier
                                 .padding(start = 40.dp, end = 40.dp)
@@ -376,8 +337,6 @@ fun GetDataScreen(
                 }
 
             Row {
-
-
                 ElevatedButton(
                     modifier = Modifier
                         .size(width = 120.dp, height = 70.dp)

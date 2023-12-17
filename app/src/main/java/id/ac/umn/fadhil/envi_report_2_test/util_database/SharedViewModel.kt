@@ -4,6 +4,20 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.google.firebase.firestore.DocumentReference
@@ -12,7 +26,9 @@ import com.google.firebase.firestore.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import id.ac.umn.fadhil.envi_report_2_test.R
 import id.ac.umn.fadhil.envi_report_2_test.nav.Screens
+import id.ac.umn.fadhil.envi_report_2_test.screen.generateIDCounter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -241,7 +257,6 @@ class SharedViewModel(): ViewModel() {
     }
 
 
-
     private suspend fun uploadImage(imageRef: StorageReference, byteArray: ByteArray): String = suspendCoroutine { continuation ->
         val uploadTask = imageRef.putBytes(byteArray)
         uploadTask.addOnSuccessListener { taskSnapshot ->
@@ -262,6 +277,7 @@ class SharedViewModel(): ViewModel() {
         // Save the data to Firestore
         firestoreRef.set(reportData).addOnSuccessListener {
             Toast.makeText(context, "Selamat, laporan anda telah masuk!", Toast.LENGTH_SHORT).show()
+
         }
     }
 
