@@ -256,15 +256,6 @@ fun AddDataScreen(
                                 containerColor = colorResource(id = R.color.buttonColor)
                             ),
                             onClick = {
-//                                val reportData = ReportData(
-//                                    reportId = id,
-//                                    reportTitle = judul,
-//                                    reportDesc = keluhan,
-//                                    reportLocation = lokasi,
-//                                    reportImageUrl = uri.toString(),
-//                                    reportStatus = status.toString(),
-//                                    reportUsername = userData?.username.toString(),
-//                                )
 
                                 if (reportData.reportTitle.isNotEmpty() &&
                                     reportData.reportDesc.isNotEmpty() &&
@@ -272,24 +263,6 @@ fun AddDataScreen(
                                     uri !== null
                                 ) {
                                     showSubmitDialog = true
-
-//                                    AlertDialog.Builder(context)
-//                                        .setTitle("Konfirmasi")
-//                                        .setMessage("Laporan yang dikirim tidak dapat diubah. "+"Apakah Anda yakin ingin mengirim laporan?")
-//                                        .setPositiveButton("Ya") { dialog, _ ->
-//                                            // User confirmed, proceed with submitting the report
-//                                            sharedViewModel.uploadImagesAndSaveData(reportData = reportData, context = context, imageUri = uri )
-//                                            generateIDCounter()
-//                                            navController.navigate(route = Screens.MainScreen.route)
-//                                            dialog.dismiss()
-//                                        }
-//                                        .setNegativeButton("Batal") { dialog, _ ->
-//                                            // User canceled, dismiss the dialog
-//                                            dialog.dismiss()
-//                                        }
-//                                        .show()
-
-
                                 } else {
                                     // Display a message if any field is empty
                                     Toast.makeText(context, "Harap isi semua kolom", Toast.LENGTH_SHORT).show()

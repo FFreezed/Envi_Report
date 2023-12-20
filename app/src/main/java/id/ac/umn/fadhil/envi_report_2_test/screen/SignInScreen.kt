@@ -1,6 +1,7 @@
 package id.ac.umn.fadhil.envi_report_2_test.screen
 
 import android.widget.Toast
+import androidx.activity.result.IntentSenderRequest
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -8,8 +9,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -23,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -33,9 +38,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
+import com.example.envi_report.ui.theme.EnviReportTheme
 import id.ac.umn.fadhil.envi_report_2_test.R
 import id.ac.umn.fadhil.envi_report_2_test.signIn.SignInState
 import id.ac.umn.fadhil.envi_report_2_test.util_database.SharedViewModel
+import kotlinx.coroutines.launch
+
+@Preview
+@Composable
+fun SignInScreen (){
+    val signInState = SignInState(true)
+    EnviReportTheme {
+        SignInScreen(state = signInState, onSignInClick = {
+            print("Yes")
+        })
+    }
+}
 
 @Composable
 fun SignInScreen(
@@ -54,14 +72,21 @@ fun SignInScreen(
     }
 
     Column(
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxSize()
     ) {
         Image(
             painter = painterResource(id = R.drawable.enviro),
             contentDescription = "Logo",
             modifier = Modifier
                 .fillMaxWidth()
+                .aspectRatio(1.5f)
+                .clip(shape = RoundedCornerShape(8.dp))
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         Text(
             text = "Selamat Datang",
             fontSize = 32.sp,

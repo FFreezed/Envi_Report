@@ -40,9 +40,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.envi_report.ui.theme.EnviReportTheme
 import id.ac.umn.fadhil.envi_report_2_test.R
 import id.ac.umn.fadhil.envi_report_2_test.signIn.UserData
 import id.ac.umn.fadhil.envi_report_2_test.util_database.ReportData
@@ -50,7 +53,26 @@ import id.ac.umn.fadhil.envi_report_2_test.util_database.SharedViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+@Preview
+@Composable
+fun ListDataScreen() {
+    val navController = rememberNavController()
+    val sharedViewModel = remember { SharedViewModel() }
+    val userData = UserData(
+        username = "EnviAdmin",
+        userId = "1",
+        profilePictureUrl = "https://picsum.photos/200/300"
+    )
 
+    EnviReportTheme {
+        // Call your Composable function here with the fake NavController and SharedViewModel
+        ListDataScreen(
+            navController = navController,
+            sharedViewModel = sharedViewModel,
+            userData = userData)
+    }
+
+}
 @Composable
 fun ListDataScreen(
     navController: NavController,
@@ -132,7 +154,8 @@ fun ListDataScreen(
                             .fillMaxWidth()
                             .padding(16.dp),
                         textAlign = TextAlign.Center,
-                        style = TextStyle(color = Color.Gray)
+                        style = TextStyle(color = Color.Gray),
+                        fontSize = 28.sp
                     )
                 }
             }

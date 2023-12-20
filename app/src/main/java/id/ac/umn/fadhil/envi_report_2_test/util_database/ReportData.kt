@@ -13,5 +13,4 @@ data class ReportData(
     var reportStatus: String = "",
     var reportUsername: String = "",
     var imageName: String = ""
-
 )

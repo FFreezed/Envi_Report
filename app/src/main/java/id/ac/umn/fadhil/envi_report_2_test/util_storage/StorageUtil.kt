@@ -11,7 +11,6 @@ import java.util.UUID
 
 class StorageUtil{
     companion object {
-
         fun uploadToStorage(uri: Uri, context: Context, type: String) {
             val storage = Firebase.storage
             val firestore = FirebaseFirestore.getInstance()

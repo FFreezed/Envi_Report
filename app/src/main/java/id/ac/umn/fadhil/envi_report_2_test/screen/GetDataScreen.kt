@@ -251,6 +251,7 @@ fun GetDataScreen(
                             interactionSource = remember {
                                 MutableInteractionSource()
                             },
+                            readOnly = true,
                             label = {
                                 Text(text = "Judul")
                             },
@@ -266,6 +267,7 @@ fun GetDataScreen(
                             interactionSource = remember {
                                 MutableInteractionSource()
                             },
+                            readOnly = true,
                             label = {
                                 Text(text = "Deskripsi")
                             },
@@ -293,7 +295,10 @@ fun GetDataScreen(
                                     readOnly = true,
                                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                                     modifier = Modifier.menuAnchor(),
-                                    colors = textFieldColor
+                                    colors = textFieldColor,
+                                    label = {
+                                        Text(text = "Status")
+                                    }
                                 )
 
                                 ExposedDropdownMenu(
