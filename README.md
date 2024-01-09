@@ -1,4 +1,4 @@
-Aplikasi Pelaporan Sederhana
+Aplikasi Pelaporan Lingkungan Mobile Sederhana
 
 Kelompok 3 
 
